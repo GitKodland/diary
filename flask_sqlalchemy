@@ -1,0 +1,7 @@
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///НАЗВАНИЕ.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+class Card(db.Model):
+    #Создание полей
+    #id
+    id = db.Column(db.Integer, primary_key=True)
