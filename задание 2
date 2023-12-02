@@ -1,0 +1,3 @@
+<label for="email">
+     <input class="form__input" type="email" name="email" id="email" placeholder="Введите e-mail" required>
+</label>
