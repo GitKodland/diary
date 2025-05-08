@@ -1,10 +1,12 @@
 #Импорт
-from flask import Flask, render_template,request, redirect
+from flask import Flask, render_template, request, redirect, session
 #Подключение библиотеки баз данных
 from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
+#Задаем секретный ключ для работы session
+app.secret_key = 'my_top_secret_123'
 #Подключение SQLite
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///diary.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,6 +24,8 @@ class Card(db.Model):
     subtitle = db.Column(db.String(300), nullable=False)
     #Текст
     text = db.Column(db.Text, nullable=False)
+    #email владельца карточки
+    user_email = db.Column(db.String(100), nullable=False)
 
     #Вывод объекта и id
     def __repr__(self):
@@ -31,39 +35,30 @@ class Card(db.Model):
 #Задание №1. Создать таблицу User
 
 
-
-
-
-
-
-
-
 #Запуск страницы с контентом
 @app.route('/', methods=['GET','POST'])
 def login():
-        error = ''
-        if request.method == 'POST':
-            form_login = request.form['email']
-            form_password = request.form['password']
+    error = ''
+    if request.method == 'POST':
+        form_login = request.form['email']
+        form_password = request.form['password']
             
-            #Задание №4. Реализовать проверку пользователей
-            
+        #Задание №4. Реализовать проверку пользователей
 
-
-            
-        else:
-            return render_template('login.html')
+     
+    else:
+        return render_template('login.html')
 
 
 
 @app.route('/reg', methods=['GET','POST'])
 def reg():
     if request.method == 'POST':
-        login= request.form['email']
+        email = request.form['email']
         password = request.form['password']
         
         #Задание №3. Реализовать запись пользователей
-        
+
 
         
         return redirect('/')
@@ -75,7 +70,7 @@ def reg():
 #Запуск страницы с контентом
 @app.route('/index')
 def index():
-    #Отображение объектов из БД
+    #Задание №4. Сделай, чтобы пользователь видел тольуо свои карточки
     cards = Card.query.order_by(Card.id).all()
     return render_template('index.html', cards=cards)
 
@@ -99,8 +94,7 @@ def form_create():
         subtitle =  request.form['subtitle']
         text =  request.form['text']
 
-        #Создание объкта для передачи в дб
-
+        #Задание №4. Сделай, чтобы создание карточки происходило от имени пользователя
         card = Card(title=title, subtitle=subtitle, text=text)
 
         db.session.add(card)
@@ -108,10 +102,6 @@ def form_create():
         return redirect('/index')
     else:
         return render_template('create_card.html')
-
-
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
