@@ -27,6 +27,10 @@ class Card(db.Model):
     #email владельца карточки
     user_email = db.Column(db.String(100), nullable=False)
 
+    #Инициализация
+    def __init__(self, **kwargs):
+        super(Card, self).__init__(**kwargs)
+    
     #Вывод объекта и id
     def __repr__(self):
         return f'<Card {self.id}>'
